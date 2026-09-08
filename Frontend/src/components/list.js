@@ -1,0 +1,170 @@
+import { Component } from "react";
+
+
+class List extends Component {
+  constructor() {
+    super();
+    this.state = {
+      toDoItems: [
+        [0, "Go to the park."],
+        [0, "Mow the lawn."],
+      ],
+      completedToDoItems: [
+        [1, "Clean room."],
+        [1, "Trip hair."],
+      ],
+    };
+  }
+
+  add = (item, toDoItemStatus) => {
+    if (toDoItemStatus == "incomplete") {
+      this.setState((prevState) => {
+        return { toDoItems: [...prevState.toDoItems, [0, item]] };
+      });
+    } else {
+      this.setState((prevState) => {
+        return {
+          completedToDoItems: [...prevState.completedToDoItems, [1, item]],
+        };
+      });
+    }
+  };
+
+  mark = (ind, toDoItemStatus) => {
+    this.setState((prevState) => {
+      if (toDoItemStatus == "incomplete") {
+        const newItems = [...prevState.toDoItems]; // Create a new outer array
+        const updatedItem = [...newItems[ind]]; // Create a new inner array for the item being modified
+        updatedItem[0] = 1 - updatedItem[0]; // Modify the new inner array
+        newItems[ind] = updatedItem; // Assign the new inner array back to the new outer array
+        console.log(newItems);
+
+        // move to completed list.
+        this.add(newItems[ind][1]);
+
+        // remove from to-do list
+        this.remove(ind, "incomplete");
+        //return { toDoItems: newItems };
+      } else {
+        const newItems = [...prevState.completedToDoItems]; // Create a new outer array
+        const updatedItem = [...newItems[ind]]; // Create a new inner array for the item being modified
+        updatedItem[0] = 1 - updatedItem[0]; // Modify the new inner array
+        newItems[ind] = updatedItem; // Assign the new inner array back to the new outer array
+        console.log(newItems);
+        
+        this.add(newItems[ind][1], "incomplete");
+        // add to to-do list
+        this.remove(ind, "complete");
+
+        return { completedToDoItems: newItems };
+      }
+    });
+  };
+
+  remove = (ind, toDoItemStatus) => {
+    if (toDoItemStatus == "incomplete") {
+      this.setState((prevState) => ({
+        toDoItems: prevState.toDoItems.filter((i, index) => index !== ind),
+      }));
+    } else {
+      this.setState((prevState) => ({
+        completedToDoItems: prevState.completedToDoItems.filter(
+          (i, index) => index !== ind
+        ),
+      }));
+    }
+  };
+
+  render() {
+    return (
+      <div>
+        <div className="todo-container">
+        <div className="input-btn-holder">
+          <input
+            id="text"
+            name="new-list"
+            type="text"
+            placeholder="enter your text"
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                this.add(document.querySelector("#text").value, "incomplete");
+                document.querySelector("#text").value = "";
+              }
+            }}
+          />
+          <button
+            id="add-btn"
+            onClick={() => {
+              this.add(document.querySelector("#text").value, "incomplete");
+              document.querySelector("#text").value = "";
+            }}
+          >
+            Add
+          </button>
+        </div>
+        {/* List Layout */}
+        <ul>
+          {this.state.toDoItems.map((item, index) => (
+            <>
+            <div className="list-item">
+              <input
+                name="check"
+                type="checkbox"
+                checked={item[0] ? "checked" : ""}
+                onChange={() => this.mark(index, "incomplete")}
+              />
+              <input
+                name="delete"
+                key={index}
+                type="button"
+                onClick={() => this.remove(index, "incomplete")}
+                value="X"
+              />
+              <div
+                className={item[0] ? "selected" : ""}
+                style={item[0] ? { textDecoration: "line-through" } : {}}
+              >
+                <span>{new Date().toLocaleDateString('en-US')}</span><br/>
+                {item[1]}
+              </div>
+              </div>
+            </>
+          ))}
+        </ul>
+        <h2>Completed</h2>
+        <ul>
+          {this.state.completedToDoItems.map((item, index) => (
+            <>
+            <div className="list-item">
+              <input
+                name="check2"
+                type="checkbox"
+                checked={item[0] ? "checked" : ""}
+                onChange={() => this.mark(index, "complete")}
+              />
+              <input
+                name="delete2"
+                key={"completed" + index}
+                type="button"
+                onClick={() => this.remove(index, "complete")}
+                value="X"
+              />
+              <div
+                className={item[0] ? "selected" : ""}
+                style={item[0] ? { textDecoration: "line-through" } : {}}
+              >
+                <span>{new Date().toLocaleDateString('en-CA')}</span><br/>
+                {item[1]}
+              </div>
+            </div>
+            </>
+          ))}
+        </ul>
+        </div>
+        
+      </div>
+    );
+  }
+}
+
+export default List;

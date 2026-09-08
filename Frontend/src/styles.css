@@ -1,0 +1,119 @@
+html {
+  /* background-color: rgb(70, 70, 70); */
+  color:#fff;
+  margin-left: 5px;
+  
+}
+body{
+  color: #fff;
+}
+.todo-container {
+  font-family: sans-serif;
+  text-align: center;
+  background-color: #5d96c5;
+  width: 300px;
+  height: 400px;
+  /* margin: 0 auto; */
+  border-radius: 5%;
+  color: #eee;
+  overflow: hidden;
+  border: 2px solid #eee;
+  overflow: scroll;
+}
+button,
+input[type="button"] {
+  background-color: #520d0dc6;
+  color: #eee;
+  font-weight: bold;
+  border: none;
+}
+input[type="checkbox"] {
+  transform: scale(1.5);
+  /* margin-right: 5px; */
+}
+ul {
+  text-align: left;
+  margin-left: -28px;
+}
+.selected {
+  color: #4ae8db;
+}
+h2 {
+  background-color: #fff;
+  overflow: hidden;
+  position: relative;
+  margin-top: 0;
+  box-sizing: border-box;
+}
+.input-btn-holder {
+  width: 100%;
+}
+#text {
+  width: 75%;
+  font-size: 16px;
+}
+#add-btn {
+  font-size: 16px;
+}
+.list-item{
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  background-color: #182a73e6;
+}
+.calendar-container{
+  width: 500px;
+  height: 400px;
+  position: relative;
+  color: #222;
+  overflow: scroll;
+}
+.calendar-grid{
+  display: grid;
+  background-color: #5d96c5;
+  width: 600px;
+  grid-template-columns: auto auto auto auto auto auto auto;
+  gap: 5x;
+  background-color: rgb(34, 134, 177);
+}
+.calendar-tasks-container{
+  background-color: rgba(153, 114, 16, 0.8);
+  width: 80px;
+  height: 60px;
+  overflow-y: scroll ;
+}
+.calendar-cell{
+  background-color: #f1f1f1;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 5px;
+  position: relative;
+}
+.calendar-title{
+  width: 80px;
+  display: inline;
+}
+.calendar-cell-weekday{
+  background-color: #3eb40c;
+  text-align: center;
+  font-weight: bold;
+  width: 80px;
+  height: 20px;
+  margin-bottom: 5px;
+}
+.calendar-day-preview{
+  background-color: #5d96c5;
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 50%;
+  height: 50%;
+  border-radius: 5px;
+  border: 2px solid #fff;
+  padding-left: 5px;
+}
+.hidden {
+  display: none;
+}
