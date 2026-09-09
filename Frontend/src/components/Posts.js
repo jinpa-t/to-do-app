@@ -2,10 +2,10 @@ import { Component } from "react";
 import { Navigate } from "react-router-dom";
 class Login extends Component {
     constructor(props) {
-    super(props);
-    this.state = {
-        data: null,
-    };
+      super(props);
+      this.state = {
+          data: null,
+      };
     }
 
     getdata = () => {
@@ -13,7 +13,6 @@ class Login extends Component {
     };
 
     posts = () => {
-        
         fetch("http://localhost:3030/api/posts/", {
         method: 'GET',
         credentials: 'include'
@@ -35,15 +34,10 @@ class Login extends Component {
           this.posts();
       }
   render() {
-    // if (!this.state.isLoggedIn) {
-    //   return <Navigate to="/login" replace={true} />;
-    // }
     const { data } = this.state;
     return (
-      
       <div className="App">
         <div>
-        
           <button
             onClick={this.posts}
             type="submit"
@@ -58,4 +52,5 @@ class Login extends Component {
     );
   }
 }
+
 export default Login;

@@ -1,5 +1,4 @@
 import { Component } from "react";
-import { useAuth } from '../hooks/useAuth';
 import Logout  from './logout';
 import CustomCalendar from "./CustomCalendar";
 import List from "./list";
@@ -13,12 +12,8 @@ class Welcome extends Component {
       isVisible: true
     };
   }
-
-  
   
   login = () => {
-    console.log("Form submitted.", this.state.email, " ", this.state.password);
-
     fetch("http://localhost:3030/login", {
       method: "POST",
       headers: {
@@ -27,15 +22,13 @@ class Welcome extends Component {
       body: JSON.stringify ({
         email: this.state.email,
         password: this.state.password,
-
       })
     })
       .then((response) => response.json())
       .then((data) => {
         // Handle successful login
         this.setState({ data: data });
-        console.log("Server API fetch successful :", data);
-        //window.location.reload();
+        
       })
       .catch((error) => {
         // Handle errors here
@@ -47,7 +40,6 @@ class Welcome extends Component {
     return (
       <div className="App">
         <div className="fs-4">Welcome to Codium. Write, Collaborate, Innovate, and Share next generation of software systems.</div>
-        
         <button onClick={() => {!this.state.isVisible}}>
           Logout
           {this.state.isVisible ? "" : <Logout />}
@@ -55,7 +47,6 @@ class Welcome extends Component {
         <h2>To-Do List</h2>
         <List></List>
         <CustomCalendar></CustomCalendar>
-        
       </div>
     );
   }

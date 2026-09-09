@@ -12,7 +12,6 @@ class Login extends Component {
     };
     this.login = this.login.bind(this)
   }
-  
 
   componentDidMount = () => {
 
@@ -29,7 +28,7 @@ class Login extends Component {
   
   login = () => {
     
-    console.log("Form submitted.", this.state.email, " ", this.state.password);
+    //console.log("Form submitted.", this.state.email, " ", this.state.password);
     fetch("http://localhost:3030/api/user/login", {
       method: "POST",
       headers: {
@@ -47,7 +46,7 @@ class Login extends Component {
         
         // Handle successful login
         this.setState({ data: data });
-        console.log("Server API fetch successful :", data);
+        //console.log("Server API fetch successful :", data);
         this.setState({isLoggedIn : true});
         
         //window.location.reload();

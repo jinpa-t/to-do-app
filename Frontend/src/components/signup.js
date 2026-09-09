@@ -12,11 +12,11 @@ class Signup extends Component {
     };
     this.register = this.register.bind(this)
   }
-  
 
   componentDidMount = () => {
      
   }
+
   updateUsername = (ev) => {
     let value = ev.target.value;
     this.setState({ username: value });
@@ -32,8 +32,7 @@ class Signup extends Component {
   };
   
   register = () => {
-    
-    console.log("Form submitted.", this.state.email, " ", this.state.password);
+    //console.log("Form submitted.", this.state.email, " ", this.state.password);
     fetch("http://localhost:3030/api/user/register", {
       method: "POST",
       headers: {
@@ -69,12 +68,10 @@ class Signup extends Component {
       return <Navigate to="/welcome" replace={true} />;
     }
     return (
-      
       <div className="App">
         <div className="fs-4">Signup to Codium</div>
         <div>
           <input type="text" onChange={this.updateUsername}
-            
             id="username"
             name="username"
             placeholder="Username"
@@ -90,7 +87,6 @@ class Signup extends Component {
             placeholder="Email"
             className="mb-2 ms-2 border border-primary"
             autoComplete="false"
-            
             title="Email"
           ></input>
           {/* <label htmlFor="email">Email </label> */}
@@ -103,7 +99,6 @@ class Signup extends Component {
             placeholder="Password"
             className="border border-primary mb-2 ms-2"
             autoComplete="false"
-            
             title="Password"
           ></input>
           <input
@@ -114,7 +109,6 @@ class Signup extends Component {
             placeholder="Confirm Password"
             className="border border-primary mb-2 ms-2"
             autoComplete="false"
-            
             title="Confirm Password"
           ></input>
           {/* <label htmlFor="password">Password </label> */}

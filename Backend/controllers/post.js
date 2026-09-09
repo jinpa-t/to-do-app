@@ -36,10 +36,8 @@ export const createPost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   //console.log(req.params);
-  //61aaf510ba8d759fb3c598a0
   try {
     const removedPost = await Posts.remove({ _id: req.params.id });
-
     res.json(removedPost);
   } catch (err) {
     res.json({ message: err });

@@ -46,4 +46,14 @@ API link: `https://xw9f6w-3000.csb.app//api/user/login`
 
 # Frontend
 ## Node.js, MySql, React.js, TailwindCSS
-## Must start each individually to work. 
+
+
+
+# Steps to run the application
+
+- Start the backend app by navigation to Backend folder
+    - Run command `npm start`
+    - Backend server will start on `http://localhost:3030/`
+- Start the frontend app by navigation to Frontend folder
+    - Run command `npm start`
+    - Frontend server will start on `http://localhost:3000/`

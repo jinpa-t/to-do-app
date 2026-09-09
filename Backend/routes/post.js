@@ -9,23 +9,8 @@ import {
 import verify from "./verify.js";
 const router = express.Router();
 
-/*
-{
-    "firstName":"John",
-    "lastName":"Doe",
-    "age": 24
-    }
-    
-    {
-        "firstName":"Jane",
-        "lastName":"Doe",
-        "age": 23
-        }
-        
-*/
-// protected route
+// protected routes
 router.get("/", verify, getPosts);
-
 router.get("/:id", verify, getPost);
 router.delete("/:id", verify, deletePost);
 router.post("/", verify, createPost);

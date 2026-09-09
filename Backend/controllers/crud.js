@@ -1,11 +1,10 @@
 import User from "../models/User.js";
+import Post from "../models/Post.js";
 import { registerValidation, loginValidation } from "../models/Validate.js";
-import verify from "../routes/verify.js";
 import bcrypt from "bcryptjs";
 import jasonWebToken from "jsonwebtoken";
 
 export const getUsers = async (req, res) => {
-  //res.send("son of *****");
   try {
     const posts = await User.find();
     res.send(posts);
@@ -52,7 +51,7 @@ export const createUser = async (req, res) => {
     res.send(err);
   }
 };
-// login
+
 export const loginUser = async (req, res) => {
   // check input error
   const { error } = loginValidation(req.body);
@@ -92,22 +91,19 @@ export const loginUser = async (req, res) => {
 // logout
 export const logoutUser = async (req, res) => {
   try {
-  res.clearCookie('token', {
-    httpOnly: true,
-    secure: true,      // Must match your original cookie settings
-    sameSite: 'LAX', // Must match your original cookie settings
-  });
-  
-  return res.status(200).json({ message: "Logged out successfully" });
-
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: true,      // Must match your original cookie settings
+      sameSite: 'LAX', // Must match your original cookie settings
+    });
+    
+    return res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {
     res.send(err);
   }
 };
 
 export const deleteUser = async (req, res) => {
-  //console.log(req.params);
-  //61aaf510ba8d759fb3c598a0
   try {
     const removedUser = await User.remove({ _id: req.params.id });
 
@@ -130,9 +126,3 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const getPosts = (req, res) => {
-  //res.json({posts:{title: "hello",
-  //    description: "How are you?"}});
-  res.send(req.user);
-  User.findOne({_id: req.user});
-};
