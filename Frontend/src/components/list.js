@@ -5,25 +5,26 @@ class List extends Component {
     super();
     this.state = {
       toDoItems: [
-        [0, "Go to the park."],
-        [0, "Mow the lawn."],
+        [0,  "Go to the park.",0, "09-22-2026"],
+        [0,  "Mow the lawn.", 1,"09-15-2026"],
       ],
       completedToDoItems: [
-        [1, "Clean room."],
-        [1, "Trip hair."],
+        [1,  "Clean room.", 2,"09-05-2026"],
+        [1, "Trip hair.",  2,"08-03-2026"],
       ],
+      priority :["High", "Medium", "Low"]
     };
   }
 
   add = (item, toDoItemStatus) => {
     if (toDoItemStatus == "incomplete") {
       this.setState((prevState) => {
-        return { toDoItems: [...prevState.toDoItems, [0, item]] };
+        return { toDoItems: [...prevState.toDoItems, [0, item, 2, "09-22-2026"]] };
       });
     } else {
       this.setState((prevState) => {
         return {
-          completedToDoItems: [...prevState.completedToDoItems, [1, item]],
+          completedToDoItems: [...prevState.completedToDoItems, [1, item,  2, "09-22-2026"]],
         };
       });
     }
@@ -123,6 +124,7 @@ class List extends Component {
                 className={item[0] ? "selected" : ""}
                 style={item[0] ? { textDecoration: "line-through" } : {}}
               >
+                <span className="priority">{this.state.priority[item[2]]}</span>
                 <span>{new Date().toLocaleDateString('en-US')}</span><br/>
                 {item[1]}
               </div>

@@ -59,14 +59,14 @@ const CustomCalendar = () => {
         for (let i = 1; i <= days; i++) {
             //console.log(typeof  currentYear , typeof  presentYear , typeof currentMonth , typeof presentMonth ,typeof  i,  typeof presentDay);
             const boxStyle = {
-                background: (currentYear == presentYear[0] && currentMonth == presentMonth[0] && i == presentDay[0])? 'lightgreen':'lightblue',
+                background: (currentYear == presentYear[0] && currentMonth == presentMonth[0] && i == presentDay[0])? 'lightgreen':'#5d96c5',
                 transition: 'transform 0.2s ease', // Makes the zoom smooth
                 
             };
             cells.push(
-            <div key={`day-${i}`} className="calendar-cell">
-                <div>{i}</div>
-                <div className='calendar-tasks-container' style={boxStyle} onClick={toogleDayPreview}>
+            <div key={`day-${i}`} className="calendar-cell" style={boxStyle}>
+                <div className='bg-none'>{i}</div>
+                <div className='calendar-tasks-container'  onClick={toogleDayPreview}>
                     <div className='calendar-tasklist-item'>Task1</div>
                     <div className='calendar-tasklist-item'>Task2</div>
                     <div className='calendar-tasklist-item'>Task2</div>

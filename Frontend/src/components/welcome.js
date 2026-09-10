@@ -38,7 +38,7 @@ class Welcome extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="home-page">
         <div className="fs-4">Welcome to Codium. Write, Collaborate, Innovate, and Share next generation of software systems.</div>
         <button onClick={() => {!this.state.isVisible}}>
           Logout

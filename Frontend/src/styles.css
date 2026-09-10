@@ -1,8 +1,6 @@
 html {
-  /* background-color: rgb(70, 70, 70); */
   color:#fff;
   margin-left: 5px;
-  
 }
 body{
   color: #fff;
@@ -16,7 +14,6 @@ body{
   /* margin: 0 auto; */
   border-radius: 5%;
   color: #eee;
-  overflow: hidden;
   border: 2px solid #eee;
   overflow: scroll;
 }
@@ -40,7 +37,7 @@ ul {
 }
 h2 {
   background-color: #fff;
-  overflow: hidden;
+  color: #222;
   position: relative;
   margin-top: 0;
   box-sizing: border-box;
@@ -63,10 +60,9 @@ h2 {
 }
 .calendar-container{
   width: 500px;
-  height: 400px;
   position: relative;
   color: #222;
-  overflow: scroll;
+  overflow:visible;
 }
 .calendar-grid{
   display: grid;
@@ -74,20 +70,21 @@ h2 {
   width: 600px;
   grid-template-columns: auto auto auto auto auto auto auto;
   gap: 5x;
-  background-color: rgb(34, 134, 177);
+  
 }
 .calendar-tasks-container{
-  background-color: rgba(153, 114, 16, 0.8);
+  background: none;
   width: 80px;
   height: 60px;
   overflow-y: scroll ;
 }
 .calendar-cell{
-  background-color: #f1f1f1;
   width: 80px;
   height: 80px;
   margin-bottom: 5px;
   position: relative;
+  border: 2px solid #000;
+  overflow: hidden;
 }
 .calendar-title{
   width: 80px;
@@ -114,6 +111,13 @@ h2 {
   border: 2px solid #fff;
   padding-left: 5px;
 }
+.calendar-tasklist-item{
+  background-color: rgba(171, 187, 28, 0.66);
+  margin-bottom: 5px;
+}
 .hidden {
   display: none;
+}
+.priority{
+  background-color: #f00;
 }
