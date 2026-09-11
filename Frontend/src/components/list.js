@@ -107,28 +107,32 @@ class List extends Component {
           {this.state.toDoItems.map((item, index) => (
             <>
             <div className="list-item">
-              <input
-                name="check"
-                type="checkbox"
-                checked={item[0] ? "checked" : ""}
-                onChange={() => this.mark(index, "incomplete")}
-              />
-              <input
-                name="delete"
-                key={index}
-                type="button"
-                onClick={() => this.remove(index, "incomplete")}
-                value="X"
-              />
+              <div className="item-actions">
+                <input
+                  name="check"
+                  type="checkbox"
+                  checked={item[0] ? "checked" : ""}
+                  onChange={() => this.mark(index, "incomplete")}
+                />
+                <input
+                  name="delete"
+                  key={index}
+                  type="button"
+                  onClick={() => this.remove(index, "incomplete")}
+                  value="X"
+                />
+              </div>
               <div
                 className={item[0] ? "selected" : ""}
                 style={item[0] ? { textDecoration: "line-through" } : {}}
               >
-                <span className="priority">{this.state.priority[item[2]]}</span>
-                <span>{new Date().toLocaleDateString('en-US')}</span><br/>
-                {item[1]}
+                <div className="item-details">
+                  <span className="item-details-priority">{this.state.priority[item[2]]}</span>
+                  <span className="item-details-date">{new Date().toLocaleDateString('en-US')}</span><br/>
+                </div>
+                <div className="item-details-description">{item[1]}</div>
               </div>
-              </div>
+            </div>
             </>
           ))}
         </ul>

@@ -10,6 +10,13 @@ const CustomCalendar = () => {
     const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
     const firstDayIndex = (month, year) => new Date(year, month, 1).getDay();
 
+    let listData = useState([
+        [0,  "Go to the park.",0, "09-22-2026"],
+        [0,  "Mow the lawn.", 1,"09-15-2026"],
+        [1,  "Clean room.", 2,"09-05-2026"],
+        [1, "Trip hair.",  2,"08-03-2026"],
+      ]);
+
     const handleNext = () => {
         if (currentMonth === 11) {
             setCurrentMonth(0);
@@ -39,6 +46,7 @@ const CustomCalendar = () => {
             calendarDayPreview.current.classList.add('hidden')
         }
     }
+
     const renderCalendar = () => {
         const days = daysInMonth(currentMonth, currentYear);
         const startDay = firstDayIndex(currentMonth, currentYear);
@@ -57,20 +65,28 @@ const CustomCalendar = () => {
 
         // 2. All actual days of the current month
         for (let i = 1; i <= days; i++) {
-            //console.log(typeof  currentYear , typeof  presentYear , typeof currentMonth , typeof presentMonth ,typeof  i,  typeof presentDay);
+            
             const boxStyle = {
                 background: (currentYear == presentYear[0] && currentMonth == presentMonth[0] && i == presentDay[0])? 'lightgreen':'#5d96c5',
-                transition: 'transform 0.2s ease', // Makes the zoom smooth
                 
             };
             cells.push(
             <div key={`day-${i}`} className="calendar-cell" style={boxStyle}>
                 <div className='bg-none'>{i}</div>
                 <div className='calendar-tasks-container'  onClick={toogleDayPreview}>
-                    <div className='calendar-tasklist-item'>Task1</div>
-                    <div className='calendar-tasklist-item'>Task2</div>
-                    <div className='calendar-tasklist-item'>Task2</div>
-                    <div className='calendar-tasklist-item'>Task2</div>
+                    {listData[0].map((item, index) => (
+                        
+                        
+                        <>
+                        {/* check if the item due date falls on this day */}
+                    
+                    
+                            <div className='calendar-tasklist-item'>{item[1]}</div>
+                        
+
+                        </>))
+                        }
+                    
                 </div>
             </div>);
         }
