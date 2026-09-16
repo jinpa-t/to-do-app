@@ -11,10 +11,10 @@ const CustomCalendar = () => {
     const firstDayIndex = (month, year) => new Date(year, month, 1).getDay();
 
     let listData = useState([
-        [0,  "Go to the park.",0, "09-22-2026"],
+        [0,  "Go to the to play Tennis.",0, "09-22-2026"],
         [0,  "Mow the lawn.", 1,"09-15-2026"],
-        [1,  "Clean room.", 2,"09-05-2026"],
-        [1, "Trip hair.",  2,"08-03-2026"],
+        [1,  "Deep Clean and Manage bedroom and closet.", 2,"09-05-2026"],
+        [1, "Get a haircut.",  2,"08-03-2026"],
       ]);
 
     const handleNext = () => {
@@ -75,18 +75,13 @@ const CustomCalendar = () => {
                 <div className='bg-none'>{i}</div>
                 <div className='calendar-tasks-container'  onClick={toogleDayPreview}>
                     {listData[0].map((item, index) => (
-                        
-                        
-                        <>
-                        {/* check if the item due date falls on this day */}
-                    
-                    
-                            <div className='calendar-tasklist-item'>{item[1]}</div>
-                        
-
-                        </>))
-                        }
-                    
+                        <React.Fragment key={index}>
+                            {i === new Date(item[3]).getDate() && currentMonth === new Date(item[3]).getMonth() && currentYear === new Date(item[3]).getFullYear()  && (
+                            <div className={`calendar-tasklist-item ${
+                                item[2] === 0 ? 'priority-high' :(item[2] === 1 ? 'priority-medium' :  'priority-low') }`}>{item[1]}</div>
+                            )}
+                        </React.Fragment>))
+                    }
                 </div>
             </div>);
         }

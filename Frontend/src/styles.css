@@ -14,7 +14,7 @@ body{
   /* margin: 0 auto; */
   border-radius: 5%;
   color: #eee;
-  border: 2px solid #eee;
+  border: 4px solid #eee;
   overflow: scroll;
 }
 button,
@@ -83,7 +83,7 @@ h2 {
   height: 80px;
   margin-bottom: 5px;
   position: relative;
-  border: 2px solid #000;
+  border: 4px solid #000;
   overflow: hidden;
 }
 .calendar-title{
@@ -108,16 +108,26 @@ h2 {
   width: 50%;
   height: 50%;
   border-radius: 5px;
-  border: 2px solid #fff;
+  border: 4px solid #fff;
   padding-left: 5px;
 }
 .calendar-tasklist-item{
   background-color: rgba(171, 187, 28, 0.66);
   margin-bottom: 5px;
+  padding-left: 4px;
 }
 .hidden {
   display: none;
 }
 .priority{
   background-color: #f00;
+}
+.priority-high{
+  border-left: 4px solid #f00;
+}
+.priority-medium{
+  border-left: 4px solid #ff0
+}
+.priority-low{
+  border-left: 4px solid #0F0;
 }
