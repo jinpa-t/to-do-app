@@ -46,6 +46,7 @@ class Welcome extends Component {
         </button>
         <h2>To-Do List</h2>
         <List></List>
+        <br/>
         <CustomCalendar></CustomCalendar>
       </div>
     );

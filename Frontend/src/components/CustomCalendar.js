@@ -35,15 +35,15 @@ const CustomCalendar = () => {
         }
     };
     
-    const toogleDayPreview = () =>{
+    const openPreview = () =>{
         if (calendarDayPreview.current) {
-            calendarDayPreview.current.classList.remove('hidden')
+            calendarDayPreview.current.classList.remove('hidden');
         }
     }
 
     const closePreview = () =>{
         if (calendarDayPreview.current) {
-            calendarDayPreview.current.classList.add('hidden')
+            calendarDayPreview.current.classList.add('hidden');
         }
     }
 
@@ -73,7 +73,7 @@ const CustomCalendar = () => {
             cells.push(
             <div key={`day-${i}`} className="calendar-cell" style={boxStyle}>
                 <div className='bg-none'>{i}</div>
-                <div className='calendar-tasks-container'  onClick={toogleDayPreview}>
+                <div className='calendar-tasks-container'  onClick={openPreview}>
                     {listData[0].map((item, index) => (
                         <React.Fragment key={index}>
                             {i === new Date(item[3]).getDate() && currentMonth === new Date(item[3]).getMonth() && currentYear === new Date(item[3]).getFullYear()  && (
@@ -99,9 +99,11 @@ const CustomCalendar = () => {
 
     return (
         <div className="calendar-container">
-            <button onClick={handlePrevious}>Previous</button>
-            <h2 className='calendar-title'>{`${currentYear} - ${currentMonth + 1}`}</h2>
-            <button onClick={handleNext}>Next</button>
+            <div className='calendar-title-container'>
+                <button onClick={handlePrevious}>Prev</button>
+                <h2 className='calendar-title'>{`${currentYear} - ${currentMonth + 1}`}</h2>
+                <button onClick={handleNext}>Next</button>
+            </div>    
             <div className="calendar-grid">
                 {renderCalendar()}
             </div>
