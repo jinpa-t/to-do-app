@@ -35,9 +35,11 @@ const CustomCalendar = () => {
         }
     };
     
-    const openPreview = () =>{
+    const openPreview = (day) =>{
+        console.log(day)
         if (calendarDayPreview.current) {
             calendarDayPreview.current.classList.remove('hidden');
+            renderPreview(day)
         }
     }
 
@@ -47,6 +49,25 @@ const CustomCalendar = () => {
         }
     }
 
+    const renderPreview = (day) => {
+        
+        const cells = [];
+       
+        cells.push(
+        <div key={`day-${day}`} className="">
+            
+                {listData[0].map((item, index) => (
+                    <React.Fragment key={index}>
+                        {day === new Date(item[3]).getDate() && currentMonth === new Date(item[3]).getMonth() && currentYear === new Date(item[3]).getFullYear()  && (
+                        <div className={`calendar-tasklist-item ${
+                            item[2] === 0 ? 'priority-high' :(item[2] === 1 ? 'priority-medium' :  'priority-low') }`}>{item[1]}</div>
+                        )}
+                    </React.Fragment>))
+                }
+        </div>);
+        
+        return cells;
+    }
     const renderCalendar = () => {
         const days = daysInMonth(currentMonth, currentYear);
         const startDay = firstDayIndex(currentMonth, currentYear);
@@ -73,7 +94,7 @@ const CustomCalendar = () => {
             cells.push(
             <div key={`day-${i}`} className="calendar-cell" style={boxStyle}>
                 <div className='bg-none'>{i}</div>
-                <div className='calendar-tasks-container'  onClick={openPreview}>
+                <div className='calendar-tasks-container' key={`day-${i}`}  onClick={() => openPreview(i)}>
                     {listData[0].map((item, index) => (
                         <React.Fragment key={index}>
                             {i === new Date(item[3]).getDate() && currentMonth === new Date(item[3]).getMonth() && currentYear === new Date(item[3]).getFullYear()  && (
@@ -109,9 +130,7 @@ const CustomCalendar = () => {
             </div>
             <div className='calendar-day-preview hidden' ref={calendarDayPreview}>
                 <button onClick={closePreview}>X</button>
-                <ul>
-                    <li>Go to the shop.</li>
-                </ul>
+                {renderPreview(5)}
             </div>
         </div>
     );
