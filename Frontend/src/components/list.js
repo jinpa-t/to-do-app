@@ -15,16 +15,21 @@ class List extends Component {
       priority :["High", "Medium", "Low"]
     };
   }
+   getPriorityClass = (priority) => {
+     if (priority === 0) return 'priority-high';
+     if (priority === 1) return 'priority-medium';
+     return 'priority-low';
+  };
 
-  add = (item, toDoItemStatus) => {
+  add = (item, toDoItemStatus, toDoItemPriority, toDoItemRepeat ) => {
     if (toDoItemStatus == "incomplete") {
       this.setState((prevState) => {
-        return { toDoItems: [...prevState.toDoItems, [0, item, 2, "09-22-2026"]] };
+        return { toDoItems: [...prevState.toDoItems, [0, item, toDoItemPriority, "09-22-2026", toDoItemRepeat]] };
       });
     } else {
       this.setState((prevState) => {
         return {
-          completedToDoItems: [...prevState.completedToDoItems, [1, item,  2, "09-22-2026"]],
+          completedToDoItems: [...prevState.completedToDoItems, [1, item,  toDoItemPriority, "09-22-2026", toDoItemRepeat]],
         };
       });
     }
@@ -71,9 +76,17 @@ class List extends Component {
         completedToDoItems: prevState.completedToDoItems.filter(
           (i, index) => index !== ind
         ),
-      }));
-    }
+      }))
+    };
+    
+    
   };
+  getPriorityClass = (priority) => {
+   if (priority === 0) return 'priority-high';
+   if (priority === 1) return 'priority-medium';
+   return 'priority-low';
+};
+
 
   render() {
     return (
@@ -87,7 +100,12 @@ class List extends Component {
             placeholder="enter your text"
             onKeyDown={(event) => {
               if (event.key === "Enter") {
-                this.add(document.querySelector("#text").value, "incomplete");
+                this.add(
+                  document.querySelector("#text").value,
+                  "incomplete",
+                  document.querySelector("#priority").value,
+                  document.querySelector("#repeat").value
+                );
                 document.querySelector("#text").value = "";
               }
             }}
@@ -97,10 +115,15 @@ class List extends Component {
             <option value="1">Medium</option>
             <option value="2">Normal</option>
           </select>
+          <select name="repeat" id="repeat">
+            <option value="0">Daily</option>
+            <option value="1">Weelky</option>
+            <option value="2">Monthly</option>
+          </select>
           <button
             id="add-btn"
             onClick={() => {
-              this.add(document.querySelector("#text").value, "incomplete");
+              this.add(document.querySelector("#text").value, "incomplete", );
               document.querySelector("#text").value = "";
             }}
           >
@@ -111,8 +134,8 @@ class List extends Component {
         {/* List Layout */}
         <ul>
           {this.state.toDoItems.map((item, index) => (
-            <>
-            <div className="list-item">
+            
+            <div className="list-item" key={index}>
               <div className="item-actions">
                 <input
                   name="check"
@@ -122,7 +145,6 @@ class List extends Component {
                 />
                 <input
                   name="delete"
-                  key={index}
                   type="button"
                   onClick={() => this.remove(index, "incomplete")}
                   value="X"
@@ -133,13 +155,13 @@ class List extends Component {
                 style={item[0] ? { textDecoration: "line-through" } : {}}
               >
                 <div className="item-details">
-                  <span className="item-details-priority">{this.state.priority[item[2]]}</span>
+                  <span className={`item-details-priority ${this.getPriorityClass(item[2])}` }>{this.state.priority[item[2]]}</span>
                   <span className="item-details-date">{new Date().toLocaleDateString('en-US')}</span><br/>
                 </div>
                 <div className="item-details-description">{item[1]}</div>
               </div>
             </div>
-            </>
+            
           ))}
         </ul>
         <h2>Completed</h2>
