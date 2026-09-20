@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
-
+import DayPreview from './dayPreview';
 const CustomCalendar = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+    const [selectedDay, setSelectedDay] = useState();
     const presentDay = useState(new Date().getDate());
     const presentMonth = useState(new Date().getMonth());
     const presentYear = useState(new Date().getFullYear());
@@ -13,10 +14,12 @@ const CustomCalendar = () => {
     let listData = useState([
         [0,  "Go to the to play Tennis.",0, "09-22-2026"],
         [0,  "Mow the lawn.", 1,"09-15-2026"],
+        [0,  "Code something good.", 0,"09-15-2026"],
         [1,  "Deep Clean and Manage bedroom and closet.", 2,"09-05-2026"],
         [1, "Get a haircut.",  2,"08-03-2026"],
       ]);
-
+    listData.sort((a,b) => a[2] - b[2]);
+    
     const handleNext = () => {
         if (currentMonth === 11) {
             setCurrentMonth(0);
@@ -39,7 +42,7 @@ const CustomCalendar = () => {
         console.log(day)
         if (calendarDayPreview.current) {
             calendarDayPreview.current.classList.remove('hidden');
-            renderPreview(day)
+            setSelectedDay(day)
         }
     }
 
@@ -49,25 +52,6 @@ const CustomCalendar = () => {
         }
     }
 
-    const renderPreview = (day) => {
-        
-        const cells = [];
-       
-        cells.push(
-        <div key={`day-${day}`} className="">
-            
-                {listData[0].map((item, index) => (
-                    <React.Fragment key={index}>
-                        {day === new Date(item[3]).getDate() && currentMonth === new Date(item[3]).getMonth() && currentYear === new Date(item[3]).getFullYear()  && (
-                        <div className={`calendar-tasklist-item ${
-                            item[2] === 0 ? 'priority-high' :(item[2] === 1 ? 'priority-medium' :  'priority-low') }`}>{item[1]}</div>
-                        )}
-                    </React.Fragment>))
-                }
-        </div>);
-        
-        return cells;
-    }
     const renderCalendar = () => {
         const days = daysInMonth(currentMonth, currentYear);
         const startDay = firstDayIndex(currentMonth, currentYear);
@@ -130,7 +114,12 @@ const CustomCalendar = () => {
             </div>
             <div className='calendar-day-preview hidden' ref={calendarDayPreview}>
                 <button onClick={closePreview}>X</button>
-                {renderPreview(5)}
+                <DayPreview 
+                    day={selectedDay} 
+                    currentMonth={currentMonth} 
+                    currentYear={currentYear} 
+                    listData={listData} 
+                    />
             </div>
         </div>
     );
