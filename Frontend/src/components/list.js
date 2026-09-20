@@ -92,6 +92,11 @@ class List extends Component {
               }
             }}
           />
+          <select name="priority" id="priority">
+            <option value="0">High</option>
+            <option value="1">Medium</option>
+            <option value="2">Normal</option>
+          </select>
           <button
             id="add-btn"
             onClick={() => {
@@ -101,6 +106,7 @@ class List extends Component {
           >
             Add
           </button>
+          
         </div>
         {/* List Layout */}
         <ul>

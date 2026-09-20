@@ -20,6 +20,12 @@ const DayPreview = ({ day, currentMonth, currentYear, listData = [] }) => {
     if (priority === 1) return 'priority-medium';
     return 'priority-low';
   };
+  
+  const getCompletedClass = (status) => {
+    if (status === 0) return 'completed-task';
+    
+    return 'incomplete-task';
+  };
 
   return (
     <div className="day-preview-container">
@@ -29,7 +35,7 @@ const DayPreview = ({ day, currentMonth, currentYear, listData = [] }) => {
       filteredTasks.map((item, index) => (
         <div 
           key={`task-${item[0] || index}`} 
-          className={`calendar-tasklist-item ${getPriorityClass(item[2])}`}
+          className={`calendar-tasklist-item ${getCompletedClass(item[0])} ${getPriorityClass(item[2])}`}
         >
           {item[1]}
         </div>

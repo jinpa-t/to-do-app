@@ -134,3 +134,11 @@ h2 {
 .priority-low{
   border-left: 4px solid #0F0;
 }
+.completed-task::before{
+  content: "✓ ";
+  color: #1a0cb4;
+}
+.incomplete-task::before{
+  content: "x ";
+  color: #1a0cb4;
+}
