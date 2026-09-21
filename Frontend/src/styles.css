@@ -9,7 +9,7 @@ body{
   font-family: sans-serif;
   text-align: center;
   background-color: #5d96c5;
-  width: 300px;
+  width: 350px;
   height: 400px;
   /* margin: 0 auto; */
   border-radius: 5%;
@@ -57,6 +57,10 @@ h2 {
   border-radius: 5px;
   margin-bottom: 5px;
   background-color: #182a73e6;
+}
+.item-details{
+  display: inline-flex;
+  gap: 12px;
 }
 .calendar-container{
   width: 600px;

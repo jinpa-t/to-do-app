@@ -4,89 +4,69 @@ class List extends Component {
   constructor() {
     super();
     this.state = {
+      universalIDCounter: 4,
       toDoItems: [
-        [0,  "Go to the park.",0, "09-22-2026"],
-        [0,  "Mow the lawn.", 1,"09-15-2026"],
-      ],
-      completedToDoItems: [
-        [1,  "Clean room.", 2,"09-05-2026"],
-        [1, "Trip hair.",  2,"08-03-2026"],
-      ],
+        [0,  "Go to the park.",0, "09-22-2026", -1 , 0],
+        [0,  "Mow the lawn.", 1,"09-15-2026", -1, 1],
+        [1,  "Clean room.", 2,"09-05-2026", -1, 3],
+        [1, "Trip hair.",  2,"08-03-2026", 0, 4],
+      ]
+      ,
       priority :["High", "Medium", "Low"]
     };
   }
-   getPriorityClass = (priority) => {
-     if (priority === 0) return 'priority-high';
-     if (priority === 1) return 'priority-medium';
-     return 'priority-low';
-  };
+   
 
-  add = (item, toDoItemStatus, toDoItemPriority, toDoItemRepeat ) => {
-    if (toDoItemStatus == "incomplete") {
-      this.setState((prevState) => {
-        return { toDoItems: [...prevState.toDoItems, [0, item, toDoItemPriority, "09-22-2026", toDoItemRepeat]] };
-      });
-    } else {
-      this.setState((prevState) => {
-        return {
-          completedToDoItems: [...prevState.completedToDoItems, [1, item,  toDoItemPriority, "09-22-2026", toDoItemRepeat]],
-        };
-      });
-    }
-  };
-
-  mark = (ind, toDoItemStatus) => {
+  add = (item, toDoItemPriority, toDoItemRepeat ) => {
     this.setState((prevState) => {
-      if (toDoItemStatus == "incomplete") {
-        const newItems = [...prevState.toDoItems]; // Create a new outer array
-        const updatedItem = [...newItems[ind]]; // Create a new inner array for the item being modified
-        updatedItem[0] = 1 - updatedItem[0]; // Modify the new inner array
-        newItems[ind] = updatedItem; // Assign the new inner array back to the new outer array
-        console.log(newItems);
-
-        // move to completed list.
-        this.add(newItems[ind][1]);
-
-        // remove from to-do list
-        this.remove(ind, "incomplete");
-        //return { toDoItems: newItems };
-      } else {
-        const newItems = [...prevState.completedToDoItems]; // Create a new outer array
-        const updatedItem = [...newItems[ind]]; // Create a new inner array for the item being modified
-        updatedItem[0] = 1 - updatedItem[0]; // Modify the new inner array
-        newItems[ind] = updatedItem; // Assign the new inner array back to the new outer array
-        console.log(newItems);
-        
-        this.add(newItems[ind][1], "incomplete");
-        // add to to-do list
-        this.remove(ind, "complete");
-
-        return { completedToDoItems: newItems };
-      }
+      return { toDoItems: [...prevState.toDoItems, [0, item, toDoItemPriority, "09-22-2026", toDoItemRepeat, ++universalIDCounter]] };
     });
   };
 
+  mark = (uuid) => {
+  this.setState((prevState) => {
+    // 1. Create a shallow copy of the outer array
+    const newItems = [...prevState.toDoItems]; 
+    
+    // 2. Find the row index where the 5th column (index 4) matches the target uuid
+    const targetIndex = newItems.findIndex(item => item && item[5] === uuid);
+
+    // 3. Safety check: make sure the item was actually found
+    if (targetIndex !== -1) {
+      // 4. Create a copy of that specific inner row array
+      const updatedItem = [...newItems[targetIndex]]; 
+      
+      // 5. Flip the status in the 1st column (index 0)
+      updatedItem[0] = 1 - updatedItem[0]; 
+      
+      // 6. Place the updated row back into our outer array copy
+      newItems[targetIndex] = updatedItem; 
+    }
+
+    // 7. Return the new state to trigger a re-render
+    return { toDoItems: newItems };
+  });
+};
+
+
   remove = (ind, toDoItemStatus) => {
-    if (toDoItemStatus == "incomplete") {
-      this.setState((prevState) => ({
-        toDoItems: prevState.toDoItems.filter((i, index) => index !== ind),
-      }));
-    } else {
-      this.setState((prevState) => ({
-        completedToDoItems: prevState.completedToDoItems.filter(
-          (i, index) => index !== ind
-        ),
-      }))
-    };
-    
-    
+    this.setState((prevState) => ({
+      toDoItems: prevState.toDoItems.filter((i, index) => index !== ind),
+    }));
   };
+
   getPriorityClass = (priority) => {
    if (priority === 0) return 'priority-high';
    if (priority === 1) return 'priority-medium';
    return 'priority-low';
-};
-
+  };
+  
+  getRepetitionType = (repetition) => {
+   if (repetition === 0) return 'Daily';
+   if (repetition === 1) return 'Weekly';
+   if (repetition === 2) return 'Monthy'
+   return 'Never';
+  };
 
   render() {
     return (
@@ -102,9 +82,9 @@ class List extends Component {
               if (event.key === "Enter") {
                 this.add(
                   document.querySelector("#text").value,
-                  "incomplete",
+                  
                   document.querySelector("#priority").value,
-                  document.querySelector("#repeat").value
+                  document.querySelector("#repeat").value || 0
                 );
                 document.querySelector("#text").value = "";
               }
@@ -133,7 +113,9 @@ class List extends Component {
         </div>
         {/* List Layout */}
         <ul>
-          {this.state.toDoItems.map((item, index) => (
+          {this.state.toDoItems.filter((item) => {
+            return item && item[0] === 0;
+          }).map((item, index) => (
             
             <div className="list-item" key={index}>
               <div className="item-actions">
@@ -141,12 +123,12 @@ class List extends Component {
                   name="check"
                   type="checkbox"
                   checked={item[0] ? "checked" : ""}
-                  onChange={() => this.mark(index, "incomplete")}
+                  onChange={() => this.mark(item[5])}
                 />
                 <input
                   name="delete"
                   type="button"
-                  onClick={() => this.remove(index, "incomplete")}
+                  onClick={() => this.remove(index)}
                   value="X"
                 />
               </div>
@@ -155,8 +137,9 @@ class List extends Component {
                 style={item[0] ? { textDecoration: "line-through" } : {}}
               >
                 <div className="item-details">
-                  <span className={`item-details-priority ${this.getPriorityClass(item[2])}` }>{this.state.priority[item[2]]}</span>
-                  <span className="item-details-date">{new Date().toLocaleDateString('en-US')}</span><br/>
+                  <div className={`item-details-priority ${this.getPriorityClass(item[2])}` }>{this.state.priority[item[2]]}</div>
+                  <div className="item-details-date">Due: {new Date().toLocaleDateString('en-US')}</div><br/>
+                  <div className="item-details-repeat">Repeat: {this.getRepetitionType(item[4])}</div><br/>
                 </div>
                 <div className="item-details-description">{item[1]}</div>
               </div>
@@ -166,20 +149,22 @@ class List extends Component {
         </ul>
         <h2>Completed</h2>
         <ul>
-          {this.state.completedToDoItems.map((item, index) => (
-            <>
+          {this.state.toDoItems.filter((item) => {
+            return item && item[0] === 1;
+          }).map((item, index) => (
+            <div key={index}>
             <div className="list-item">
               <input
                 name="check2"
                 type="checkbox"
                 checked={item[0] ? "checked" : ""}
-                onChange={() => this.mark(index, "complete")}
+                onChange={() => this.mark(item[5])}
               />
               <input
                 name="delete2"
                 key={"completed" + index}
                 type="button"
-                onClick={() => this.remove(index, "complete")}
+                onClick={() => this.remove(index)}
                 value="X"
               />
               <div
@@ -190,7 +175,7 @@ class List extends Component {
                 {item[1]}
               </div>
             </div>
-            </>
+            </div>
           ))}
         </ul>
         </div>
