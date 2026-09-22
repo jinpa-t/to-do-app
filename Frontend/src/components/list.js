@@ -10,12 +10,37 @@ class List extends Component {
         [0,  "Mow the lawn.", 1,"09-15-2026", -1, 1],
         [1,  "Clean room.", 2,"09-05-2026", -1, 3],
         [1, "Trip hair.",  2,"08-03-2026", 0, 4],
-      ]
-      ,
-      priority :["High", "Medium", "Low"]
+      ],
+      todoData : [],
+      loading: true,
+      error: null,
+      priority :["High", "Medium", "Low"],
     };
+    
   }
-   
+  async componentDidMount(){
+    try {
+      const response = await fetch('http://localhost:3030/api/posts/', {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+      if(!response.ok) {
+        throw new Error("Network error while fetching data.");
+      }
+      const result = await response.json();
+      this.setState ({
+        todoData: result,
+        loading: false
+      });
+      console.log("DATA: ", todoData);
+      
+    } catch (err) {
+      this.setState({ error: err.message, loading: false });
+    }
+  }
 
   add = (item, toDoItemPriority, toDoItemRepeat ) => {
     this.setState((prevState) => {
@@ -49,7 +74,7 @@ class List extends Component {
 };
 
 
-  remove = (ind, toDoItemStatus) => {
+  remove = (ind) => {
     this.setState((prevState) => ({
       toDoItems: prevState.toDoItems.filter((i, index) => index !== ind),
     }));
@@ -111,7 +136,7 @@ class List extends Component {
           </button>
           
         </div>
-        {/* List Layout */}
+        <h2>Remaining Tasks</h2>
         <ul>
           {this.state.toDoItems.filter((item) => {
             return item && item[0] === 0;
@@ -142,6 +167,39 @@ class List extends Component {
                   <div className="item-details-repeat">Repeat: {this.getRepetitionType(item[4])}</div><br/>
                 </div>
                 <div className="item-details-description">{item[1]}</div>
+              </div>
+            </div>
+            
+          ))}
+        </ul>
+        <ul>
+          {this.state.todoData.map((item) => (
+            
+            <div className="list-item" key={item._id}>
+              <div className="item-actions">
+                <input
+                  name="check"
+                  type="checkbox"
+                  checked={item[0] ? "checked" : ""}
+                  onChange={() => this.mark("item[5]")}
+                />
+                <input
+                  name="delete"
+                  type="button"
+                  onClick={() => this.remove("index")}
+                  value="X"
+                />
+              </div>
+              <div
+                className={item[0] ? "selected" : ""}
+                style={item[0] ? { textDecoration: "line-through" } : {}}
+              >
+                <div className="item-details">
+                  <div className={`item-details-priority ${this.getPriorityClass(item[2])}` }>{this.state.priority[item[2]]}</div>
+                  <div className="item-details-date">Due: {new Date().toLocaleDateString('en-US')}</div><br/>
+                  <div className="item-details-repeat">Repeat: {this.getRepetitionType(item[4])}</div><br/>
+                </div>
+                <div className="item-details-description">{item.description}</div>
               </div>
             </div>
             
