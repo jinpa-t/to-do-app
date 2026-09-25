@@ -32,14 +32,13 @@ class Signup extends Component {
   };
   
   register = () => {
-    //console.log("Form submitted.", this.state.email, " ", this.state.password);
     fetch("http://localhost:3030/api/user/register", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify ({
-        username: this.state.username,
+        name: this.state.username,
         email: this.state.email,
         password: this.state.password,
         
@@ -47,14 +46,11 @@ class Signup extends Component {
       credentials: 'include'
     })
     .then((response) => response.json())
-    .then((data) => {
-        
+    .then((data) => {  
         // Handle successful login
         this.setState({ data: data });
         console.log("Server API fetch successful :", data);
         this.setState({isLoggedIn : true});
-        
-        //window.location.reload();
       })
       .catch((error) => {
         // Handle errors here
@@ -114,7 +110,7 @@ class Signup extends Component {
           {/* <label htmlFor="password">Password </label> */}
           <br />
           <button
-            onClick={this.login}
+            onClick={this.register}
             type="submit"
             className="btn btn-primary"
           >Create Account</button>

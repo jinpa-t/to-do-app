@@ -7,6 +7,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import userRoutes from "./routes/router.js";
 import postRoutes from "./routes/post.js";
+import todoRoutes from "./routes/todo.js";
 import cookieParser from "cookie-parser"
 import 'dotenv/config'; 
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 
 app.use("/api/user", userRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/todos", todoRoutes);
 
 const con = mysql.createConnection({
   host: env.Host,

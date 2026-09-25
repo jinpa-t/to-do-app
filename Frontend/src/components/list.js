@@ -4,23 +4,16 @@ class List extends Component {
   constructor() {
     super();
     this.state = {
-      universalIDCounter: 4,
-      toDoItems: [
-        [0,  "Go to the park.",0, "09-22-2026", -1 , 0],
-        [0,  "Mow the lawn.", 1,"09-15-2026", -1, 1],
-        [1,  "Clean room.", 2,"09-05-2026", -1, 3],
-        [1, "Trip hair.",  2,"08-03-2026", 0, 4],
-      ],
       todoData : [],
       loading: true,
       error: null,
       priority :["High", "Medium", "Low"],
     };
-    
   }
+
   async componentDidMount(){
     try {
-      const response = await fetch('http://localhost:3030/api/posts/', {
+      const response = await fetch('http://localhost:3030/api/todos/', {
       method: "GET",
       headers: {
         'Content-Type': 'application/json'
@@ -35,49 +28,122 @@ class List extends Component {
         todoData: result,
         loading: false
       });
-      console.log("DATA: ", todoData);
+      //console.log("DATA: ", todoData);
       
     } catch (err) {
       this.setState({ error: err.message, loading: false });
     }
   }
 
-  add = (item, toDoItemPriority, toDoItemRepeat ) => {
-    this.setState((prevState) => {
-      return { toDoItems: [...prevState.toDoItems, [0, item, toDoItemPriority, "09-22-2026", toDoItemRepeat, ++universalIDCounter]] };
+  fetchAllTodos = async() =>{
+    try {
+      const response = await fetch('http://localhost:3030/api/todos/', {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
     });
+      if(!response.ok) {
+        throw new Error("Network error while fetching data.");
+      }
+      const result =  await response.json();
+      this.setState ({
+        todoData: result,
+        loading: false
+      });
+      //console.log("DATA: ", todoData);
+      
+    } catch (err) {
+      this.setState({ error: err.message, loading: false });
+      console.log(this.state.error);
+    }
+  }
+
+  add = (toDoListDescription, toDoListPriority, toDoListRepeat, toDoListDueDate ) => {
+    /*
+      send post request to the backend for saving.
+      request body:
+      {
+        status: req.body.status,
+        description: req.body.description,
+        priority: req.body.priority,
+        dueDate: req.body.dueDate,
+        repetition: req.body.repetition
+      }
+    */
+    fetch('http://localhost:3030/api/todos/', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json' // 1. Tells the server you are sending JSON
+      },
+      body: JSON.stringify({
+        status: 0,
+        description: toDoListDescription,
+        priority: toDoListPriority,
+        dueDate: toDoListDueDate,
+        repetition: toDoListRepeat
+      })
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        this.fetchAllTodos();
+        console.log("ToDo List saved successfully:", data);
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+      });
   };
 
-  mark = (uuid) => {
-  this.setState((prevState) => {
-    // 1. Create a shallow copy of the outer array
-    const newItems = [...prevState.toDoItems]; 
-    
-    // 2. Find the row index where the 5th column (index 4) matches the target uuid
-    const targetIndex = newItems.findIndex(item => item && item[5] === uuid);
+  mark = (uuid, item) => {
+    /*
+      PATCH: update the status of the list.
+    */
+   let itemCopy = item;
+   itemCopy.status = 1 - itemCopy.status;
+   
+  fetch(`http://localhost:3030/api/todos/${uuid}`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json' // 1. Tells the server you are sending JSON
+      },
+      body: JSON.stringify({
+        itemCopy
+      })
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("ToDo List saved successfully:", data);
+        this.fetchAllTodos(); 
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+      });
+  };
 
-    // 3. Safety check: make sure the item was actually found
-    if (targetIndex !== -1) {
-      // 4. Create a copy of that specific inner row array
-      const updatedItem = [...newItems[targetIndex]]; 
-      
-      // 5. Flip the status in the 1st column (index 0)
-      updatedItem[0] = 1 - updatedItem[0]; 
-      
-      // 6. Place the updated row back into our outer array copy
-      newItems[targetIndex] = updatedItem; 
-    }
-
-    // 7. Return the new state to trigger a re-render
-    return { toDoItems: newItems };
-  });
-};
-
-
-  remove = (ind) => {
-    this.setState((prevState) => ({
-      toDoItems: prevState.toDoItems.filter((i, index) => index !== ind),
-    }));
+  remove = (uuid) => {
+    /*
+      SEND ID to delete the list.
+    */
+    fetch(`http://localhost:3030/api/todos/${uuid}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json' // 1. Tells the server you are sending JSON
+      },
+      body: []
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({data : data});
+        this.fetchAllTodos(); 
+        // console.log("ToDo List deleted successfully:", data);
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+      });
   };
 
   getPriorityClass = (priority) => {
@@ -106,10 +172,10 @@ class List extends Component {
             onKeyDown={(event) => {
               if (event.key === "Enter") {
                 this.add(
-                  document.querySelector("#text").value,
-                  
-                  document.querySelector("#priority").value,
-                  document.querySelector("#repeat").value || 0
+                document.querySelector("#text").value,
+                document.querySelector("#priority").value || 2,
+                (document.querySelector("#repeat").value || -1),
+                (document.querySelector("#dueDate").value || 0),
                 );
                 document.querySelector("#text").value = "";
               }
@@ -118,86 +184,60 @@ class List extends Component {
           <select name="priority" id="priority">
             <option value="0">High</option>
             <option value="1">Medium</option>
-            <option value="2">Normal</option>
+            <option value="2" defaultChecked>Normal</option>
           </select>
           <select name="repeat" id="repeat">
+            <option value="-1" defaultChecked>Never</option>
             <option value="0">Daily</option>
             <option value="1">Weelky</option>
             <option value="2">Monthly</option>
           </select>
+          <input name="dueDate" id="dueDate" type="date"></input>
           <button
             id="add-btn"
             onClick={() => {
-              this.add(document.querySelector("#text").value, "incomplete", );
+              this.add(
+                document.querySelector("#text").value,
+                document.querySelector("#priority").value || 2,
+                (document.querySelector("#repeat").value || -1),
+                (document.querySelector("#dueDate").value || 0),
+              );
               document.querySelector("#text").value = "";
             }}
           >
             Add
           </button>
-          
         </div>
+
         <h2>Remaining Tasks</h2>
         <ul>
-          {this.state.toDoItems.filter((item) => {
-            return item && item[0] === 0;
-          }).map((item, index) => (
-            
-            <div className="list-item" key={index}>
-              <div className="item-actions">
-                <input
-                  name="check"
-                  type="checkbox"
-                  checked={item[0] ? "checked" : ""}
-                  onChange={() => this.mark(item[5])}
-                />
-                <input
-                  name="delete"
-                  type="button"
-                  onClick={() => this.remove(index)}
-                  value="X"
-                />
-              </div>
-              <div
-                className={item[0] ? "selected" : ""}
-                style={item[0] ? { textDecoration: "line-through" } : {}}
-              >
-                <div className="item-details">
-                  <div className={`item-details-priority ${this.getPriorityClass(item[2])}` }>{this.state.priority[item[2]]}</div>
-                  <div className="item-details-date">Due: {new Date().toLocaleDateString('en-US')}</div><br/>
-                  <div className="item-details-repeat">Repeat: {this.getRepetitionType(item[4])}</div><br/>
-                </div>
-                <div className="item-details-description">{item[1]}</div>
-              </div>
-            </div>
-            
-          ))}
-        </ul>
-        <ul>
-          {this.state.todoData.map((item) => (
+          {this.state.todoData.filter((item) => {
+            return item && item.status === 0;
+          }).map((item) => (
             
             <div className="list-item" key={item._id}>
               <div className="item-actions">
                 <input
                   name="check"
                   type="checkbox"
-                  checked={item[0] ? "checked" : ""}
-                  onChange={() => this.mark("item[5]")}
+                  checked={item.status ? "checked" : ""}
+                  onChange={() => this.mark(item._id, item )}
                 />
                 <input
                   name="delete"
                   type="button"
-                  onClick={() => this.remove("index")}
+                  onClick={() => this.remove(item._id)}
                   value="X"
                 />
               </div>
               <div
-                className={item[0] ? "selected" : ""}
-                style={item[0] ? { textDecoration: "line-through" } : {}}
+                className={item.status ? "selected" : ""}
+                style={item.status ? { textDecoration: "line-through" } : {}}
               >
                 <div className="item-details">
-                  <div className={`item-details-priority ${this.getPriorityClass(item[2])}` }>{this.state.priority[item[2]]}</div>
-                  <div className="item-details-date">Due: {new Date().toLocaleDateString('en-US')}</div><br/>
-                  <div className="item-details-repeat">Repeat: {this.getRepetitionType(item[4])}</div><br/>
+                  <div className={`item-details-priority ${this.getPriorityClass(item.priority)}` }>{this.state.priority.priority}</div>
+                  <div className="item-details-date">Due: {item.dueDate.substring(0,10)|| ''}</div><br/>
+                  <div className="item-details-repeat">Repeat: {this.getRepetitionType(item.repetition)}</div><br/>
                 </div>
                 <div className="item-details-description">{item.description}</div>
               </div>
@@ -205,39 +245,38 @@ class List extends Component {
             
           ))}
         </ul>
+
         <h2>Completed</h2>
         <ul>
-          {this.state.toDoItems.filter((item) => {
-            return item && item[0] === 1;
+          {this.state.todoData.filter((item) => {
+            return item && item.status === 1;
           }).map((item, index) => (
             <div key={index}>
-            <div className="list-item">
-              <input
-                name="check2"
-                type="checkbox"
-                checked={item[0] ? "checked" : ""}
-                onChange={() => this.mark(item[5])}
-              />
-              <input
-                name="delete2"
-                key={"completed" + index}
-                type="button"
-                onClick={() => this.remove(index)}
-                value="X"
-              />
-              <div
-                className={item[0] ? "selected" : ""}
-                style={item[0] ? { textDecoration: "line-through" } : {}}
-              >
-                <span>{new Date().toLocaleDateString('en-CA')}</span><br/>
-                {item[1]}
+              <div className="list-item">
+                <input
+                  name="check2"
+                  type="checkbox"
+                  checked={item.status ? "checked" : ""}
+                  onChange={() => this.mark(item._id, item)}
+                />
+                <input
+                  name="delete2"
+                  type="button"
+                  onClick={() => this.remove(item._id)}
+                  value="X"
+                />
+                <div
+                  className={item.status ? "selected" : ""}
+                  style={item.status ? { textDecoration: "line-through" } : {}}
+                >
+                  <span>{item.dueDate.substring(0,10) || ''}</span><br/>
+                  {item.description}
+                </div>
               </div>
-            </div>
             </div>
           ))}
         </ul>
-        </div>
-        
+        </div>  
       </div>
     );
   }
