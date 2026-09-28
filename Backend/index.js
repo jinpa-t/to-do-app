@@ -25,22 +25,15 @@ app.use("/api/user", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/todos", todoRoutes);
 
+/* 
+Currently MySQL is not being used. 
+
 const con = mysql.createConnection({
   host: env.Host,
   user: env.Username,
   port: env.Port,
   password: env.Password,
 });
-
-mongoose
-  .connect(env.db_con)
-  .then(() => {
-    if(mongoose.connection.readyState == 1)
-      console.log(`*** Connected to MongoDB ***`);
-  })
-  .catch((err) => {
-    console.log("MongoDB connection error: ", err);
-  });
 
 con.connect(function (err) {
   try {
@@ -51,9 +44,24 @@ con.connect(function (err) {
   }
 });
 
+*/
+mongoose
+  .connect(env.db_con)
+  .then(() => {
+    if(mongoose.connection.readyState == 1)
+      console.log(`*** Connected to MongoDB ***`);
+  })
+  .catch((err) => {
+    console.log("MongoDB connection error: ", err);
+  });
+
+
 app.get("/", (req, res) => {
   res.send({message: {}});
 });
+
+/*
+Currently MySQL is not being used. 
 
 app.get("/total_users", (req, res) => {
    con.query(
@@ -94,6 +102,7 @@ app.post("/login", (req, res) => {
   );
 });
 
+*/
 app.listen(port, () => {
   console.warn(`*** Server started on ${port} ***`);
 });
