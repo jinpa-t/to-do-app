@@ -2,10 +2,10 @@ import React from 'react';
 
 const DayPreview = ({ day, currentMonth, currentYear, listData = [] }) => {
   
-  const tasks = listData[0] || [];
+  const tasks = listData || [];
   
   const filteredTasks = tasks.filter((item) => {
-    const taskDate = new Date(item[3]);
+    const taskDate = new Date(item.dueDate.substring(0,10));
     return (
       day === taskDate.getDate() &&
       currentMonth === taskDate.getMonth() &&
@@ -22,7 +22,7 @@ const DayPreview = ({ day, currentMonth, currentYear, listData = [] }) => {
   };
   
   const getCompletedClass = (status) => {
-    if (status === 0) return 'completed-task';
+    if (status === 1) return 'completed-task';
     
     return 'incomplete-task';
   };
@@ -34,10 +34,10 @@ const DayPreview = ({ day, currentMonth, currentYear, listData = [] }) => {
     ) : (
       filteredTasks.map((item, index) => (
         <div 
-          key={`task-${item[0] || index}`} 
-          className={`calendar-tasklist-item ${getCompletedClass(item[0])} ${getPriorityClass(item[2])}`}
+          key={`task-${item._id || index}`} 
+          className={`calendar-tasklist-item ${getCompletedClass(item.status)} ${getPriorityClass(item.priority)}`}
         >
-          {item[1]}
+          {item.description}
         </div>
       ))
     )}

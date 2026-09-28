@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import DayPreview from './dayPreview';
 const CustomCalendar = () => {
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -10,7 +10,7 @@ const CustomCalendar = () => {
     const calendarDayPreview = useRef(null);
     const daysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
     const firstDayIndex = (month, year) => new Date(year, month, 1).getDay();
-
+    const [todoData, setToDoData] = useState([]);
     let listData = useState([
         [0,  "Go to the to play Tennis.",0, "09-22-2026"],
         [0,  "Mow the lawn.", 1,"09-15-2026"],
@@ -19,7 +19,49 @@ const CustomCalendar = () => {
         [1, "Get a haircut.",  2,"08-03-2026"],
       ]);
     listData.sort((a,b) => a[2] - b[2]);
-    
+     useEffect(() => {
+        const loadData = async () => {
+        try {
+            const response = await fetch('http://localhost:3030/api/todos/', {
+            method: "GET",
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+            if(!response.ok) {
+            throw new Error("Network error while fetching data.");
+            }
+            const result = await response.json();
+            setToDoData (result);
+            
+        } catch (err) {
+            console.log("Error loading data: ", err);
+        }
+        }
+        loadData();
+    },[]);
+
+    const fetchAllTodos = async() =>{
+        try {
+            const response = await fetch('http://localhost:3030/api/todos/', {
+            method: "GET",
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+            if(!response.ok) {
+            throw new Error("Network error while fetching data.");
+            }
+            const result = await response.json();
+            setToDoData (result);
+            
+        } catch (err) {
+            console.log("Error loading data: ", err);
+        }
+    }
+  
     const handleNext = () => {
         if (currentMonth === 11) {
             setCurrentMonth(0);
@@ -30,6 +72,7 @@ const CustomCalendar = () => {
     };
 
     const handlePrevious = () => {
+        fetchAllTodos();
         if (currentMonth === 0) {
             setCurrentMonth(11);
             setCurrentYear(currentYear - 1);
@@ -79,11 +122,11 @@ const CustomCalendar = () => {
             <div key={`day-${i}`} className="calendar-cell" style={boxStyle}>
                 <div className='bg-none'>{i}</div>
                 <div className='calendar-tasks-container' key={`day-${i}`}  onClick={() => openPreview(i)}>
-                    {listData[0].map((item, index) => (
-                        <React.Fragment key={index}>
-                            {i === new Date(item[3]).getDate() && currentMonth === new Date(item[3]).getMonth() && currentYear === new Date(item[3]).getFullYear()  && (
+                    { todoData.map((item) => (
+                        <React.Fragment key={item._id}>
+                            {i === new Date(item.dueDate.substring(0,10)).getDate() && currentMonth === new Date(item.dueDate.substring(0,10)).getMonth() && currentYear === new Date(item.dueDate.substring(0,10)).getFullYear()  && (
                             <div className={`calendar-tasklist-item ${
-                                item[2] === 0 ? 'priority-high' :(item[2] === 1 ? 'priority-medium' :  'priority-low') }`}>{item[1]}</div>
+                                item.priority === 0 ? 'priority-high' :(item.priority === 1 ? 'priority-medium' :  'priority-low') }`}>{item.description}</div>
                             )}
                         </React.Fragment>))
                     }
@@ -118,7 +161,7 @@ const CustomCalendar = () => {
                     day={selectedDay} 
                     currentMonth={currentMonth} 
                     currentYear={currentYear} 
-                    listData={listData} 
+                    listData={todoData} 
                     />
             </div>
         </div>
