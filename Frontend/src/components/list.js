@@ -1,4 +1,5 @@
-import { Component } from "react";
+import React, { Component } from "react";
+import Edit from "./Edit";
 
 class List extends Component {
   constructor() {
@@ -8,7 +9,9 @@ class List extends Component {
       loading: true,
       error: null,
       priority :["High", "Medium", "Low"],
+      selectedId: null,
     };
+    this.editWindow =  React.createRef();
   }
 
   async componentDidMount(){
@@ -59,6 +62,20 @@ class List extends Component {
       console.log(this.state.error);
     }
   }
+
+  openPreview = (item) =>{
+       // console.log(item)
+        if (this.editWindow.current) {
+            this.editWindow.current.classList.remove('hidden');
+            this.setState({selectedId: item});
+        }
+    }
+
+    closePreview = () =>{
+        if (this.editWindow.current) {
+            this.editWindow.current.classList.add('hidden');
+        }
+    }
 
   add = (toDoListDescription, toDoListPriority, toDoListRepeat, toDoListDueDate ) => {
     /*
@@ -224,6 +241,12 @@ class List extends Component {
                   onChange={() => this.mark(item._id, item )}
                 />
                 <input
+                  name="edit"
+                  type="button"
+                  onClick={() => this.openPreview(item)}
+                  value="Edit"
+                />
+                <input
                   name="delete"
                   type="button"
                   onClick={() => this.remove(item._id)}
@@ -277,6 +300,10 @@ class List extends Component {
           ))}
         </ul>
         </div>  
+        <div className='calendar-day-preview hidden' ref={this.editWindow}>
+            <button onClick={this.closePreview}>X</button>
+            <Edit selectItem={this.state.selectedId} />
+        </div>
       </div>
     );
   }
