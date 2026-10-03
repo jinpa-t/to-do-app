@@ -124,7 +124,7 @@ const CustomCalendar = () => {
                 <div className='calendar-tasks-container' key={`day-${i}`}  onClick={() => openPreview(i)}>
                     { todoData.map((item) => (
                         <React.Fragment key={item._id}>
-                            {i === new Date(item.dueDate.substring(0,10)).getDate() && currentMonth === new Date(item.dueDate.substring(0,10)).getMonth() && currentYear === new Date(item.dueDate.substring(0,10)).getFullYear()  && (
+                            {i === new Date(item.dueDate.substring(0,10)).getUTCDate() && currentMonth === new Date(item.dueDate.substring(0,10)).getUTCMonth() && currentYear === new Date(item.dueDate.substring(0,10)).getUTCFullYear()  && (
                             <div className={`calendar-tasklist-item ${
                                 item.priority === 0 ? 'priority-high' :(item.priority === 1 ? 'priority-medium' :  'priority-low') }`}>{item.description}</div>
                             )}
