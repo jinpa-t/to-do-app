@@ -1,8 +1,9 @@
 import React , {useState} from 'react';
 
-const Edit = ({ selectItem }) => {
+const Edit = ({ selectedItem }) => {
   
-  const [_selectItem, setSelectItem] = useState(selectItem);
+  const [_selectedItem, setSelectItem] = useState(selectedItem);
+  const [successMsg, setScuccessMsg] = useState(false);
 
   const getPriorityClass = (priority) => {
     if (priority === 0) return 'priority-high';
@@ -22,6 +23,27 @@ const Edit = ({ selectItem }) => {
     description: e.target.value
   }));
   };
+
+  const handleDateChange = (e) => {
+    setSelectItem(prevItem => ({
+    ...prevItem,
+    dueDate: e.target.value
+  }));
+  };
+
+  const handlePriorityChange = (e) => {
+    setSelectItem(prevItem => ({
+    ...prevItem,
+    priority: e.target.value
+  }));
+  };
+
+  const handleRepetitionChange = (e) => {
+    setSelectItem(prevItem => ({
+    ...prevItem,
+    repetition: e.target.value
+  }));
+  };
   
 
   const add = (toDoListDescription, toDoListPriority, toDoListRepeat, toDoListDueDate ) => {
@@ -36,7 +58,7 @@ const Edit = ({ selectItem }) => {
       }
     */
    
-    fetch(`http://localhost:3030/api/todos/${selectItem._id}`, {
+    fetch(`http://localhost:3030/api/todos/${selectedItem._id}`, {
       method: 'PATCH',
       credentials: 'include',
       headers: {
@@ -44,15 +66,15 @@ const Edit = ({ selectItem }) => {
       },
       body: JSON.stringify({
        
-        description: _selectItem.description,
-        priority: _selectItem.priority,
-        dueDate: _selectItem.dueDate,
-        repetition: _selectItem.repetition
+        description: _selectedItem.description,
+        priority: _selectedItem.priority,
+        dueDate: _selectedItem.dueDate,
+        repetition: _selectedItem.repetition
       })
       })
       .then((response) => response.json())
       .then((data) => {
-        
+        setScuccessMsg(true);
         console.log("ToDo List saved successfully:", data);
       })
       .catch((error) => {
@@ -68,22 +90,22 @@ const Edit = ({ selectItem }) => {
           <input
             id="text"
             name="new-list"
-            type="text"
-            value={selectItem?.description || ''}
+            type="text" 
+            value={_selectedItem?.description || ''}
             onChange={handleDescriptionChange}
           />
-          <select name="priority" id="priority" value={_selectItem?.priority}>
+          <select name="priority" id="priority" value={_selectedItem?.priority} onChange={handlePriorityChange}>
             <option value="0">High</option>
             <option value="1">Medium</option>
             <option value="2" defaultChecked>Normal</option>
           </select>
-          <select name="repeat" id="repeat" value={_selectItem?.repetition}>
+          <select name="repeat" id="repeat" value={_selectedItem?.repetition} onChange={handleRepetitionChange}>
             <option value="-1" defaultChecked>Never</option>
             <option value="0">Daily</option>
             <option value="1">Weelky</option>
             <option value="2">Monthly</option>
           </select>
-          <input name="dueDate" id="dueDate" type="date" value={selectItem?.dueDate.substring(0,10)}></input>
+          <input name="dueDate" id="dueDate" type="date" value={_selectedItem?.dueDate.substring(0,10)} onChange={handleDateChange}></input>
           <button
             id="add-btn"
             onClick={() => {
@@ -98,6 +120,9 @@ const Edit = ({ selectItem }) => {
           >
             Save
           </button>
+          {successMsg && <div className='priority-normal'>Saved successfully</div>
+
+          }
           
         </div>
       

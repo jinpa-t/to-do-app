@@ -9,7 +9,7 @@ class List extends Component {
       loading: true,
       error: null,
       priority :["High", "Medium", "Low"],
-      selectedId: null,
+      selectedItem: null,
     };
     this.editWindow =  React.createRef();
   }
@@ -67,13 +67,14 @@ class List extends Component {
        // console.log(item)
         if (this.editWindow.current) {
             this.editWindow.current.classList.remove('hidden');
-            this.setState({selectedId: item});
+            this.setState({selectedItem: item});
         }
     }
 
     closePreview = () =>{
         if (this.editWindow.current) {
             this.editWindow.current.classList.add('hidden');
+            this.fetchAllTodos();
         }
     }
 
@@ -302,7 +303,7 @@ class List extends Component {
         </div>  
         <div className='calendar-day-preview hidden' ref={this.editWindow}>
             <button onClick={this.closePreview}>X</button>
-            <Edit selectItem={this.state.selectedId} />
+            <Edit selectedItem={this.state.selectedItem} key={this.state.selectedItem?._id}/>
         </div>
       </div>
     );
