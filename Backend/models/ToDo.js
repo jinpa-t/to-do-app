@@ -36,7 +36,12 @@ const todoSchema = new mongoose.Schema({
     required: true,
     default: 0
   },
-  
+  // Index 5: custom category for the item.
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: [false, 'Category is required']
+  }
 }, {
   timestamps: true
 });

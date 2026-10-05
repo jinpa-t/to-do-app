@@ -1,8 +1,21 @@
 import Todos from "../models/ToDo.js";
+import Category from "../models/Category.js";
+
+const defaultCategory = {
+  'general':'6ac414b908165769a9fd20c1',
+  'work':'6ac414b908165769a9fd20c2',
+  'personal':'6ac414b908165769a9fd20c3',
+}
 
 export const getTodos = async (req, res) => {
   try {
-    const todos = await Todos.find({ author: req.user._id }); 
+    // const todos = await Todos.find({ author: req.user._id }); 
+    // res.json(todos);
+    const userId = req.user._id;
+
+    // Standard Mongoose populate handles global and custom categories automatically
+    const todos = await Todos.find({ author: userId }).populate('category');
+
     res.json(todos);
   } catch (err) {
     res.status(500).json({ message: err.message || err });
@@ -19,13 +32,15 @@ export const getTodo = async (req, res) => {
 };
 
 export const createTodo = async (req, res) => {
+  
   const todo = new Todos({
     author: req.user._id,
     description: req.body.description,
     dueDate: req.body.dueDate,
     priority: req.body.priority,
     repetition: req.body.repetition,
-    status: req.body.status
+    status: req.body.status,
+    category: defaultCategory[req.body.category],
   });
   try {
     const savedTodo = await todo.save();

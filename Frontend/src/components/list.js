@@ -101,7 +101,8 @@ class List extends Component {
         description: toDoListDescription,
         priority: toDoListPriority,
         dueDate: toDoListDueDate,
-        repetition: toDoListRepeat
+        repetition: toDoListRepeat,
+        category: 'work'
       })
       })
       .then((response) => response.json())
@@ -262,6 +263,7 @@ class List extends Component {
                   <div className={`item-details-priority ${this.getPriorityClass(item.priority)}` }>{this.state.priority.priority}</div>
                   <div className="item-details-date">Due: {item.dueDate.substring(0,10)|| ''}</div><br/>
                   <div className="item-details-repeat">Repeat: {this.getRepetitionType(item.repetition)}</div><br/>
+                  <div className="item-details-category">Category: {item.category?.name}</div><br/>
                 </div>
                 <div className="item-details-description">{item.description}</div>
               </div>
