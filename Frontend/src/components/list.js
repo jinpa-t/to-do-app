@@ -10,6 +10,7 @@ class List extends Component {
       error: null,
       priority :["High", "Medium", "Low"],
       selectedItem: null,
+      allCategories: null,
     };
     this.editWindow =  React.createRef();
   }
@@ -32,6 +33,28 @@ class List extends Component {
         loading: false
       });
       //console.log("DATA: ", todoData);
+      
+    } catch (err) {
+      this.setState({ error: err.message, loading: false });
+    }
+
+    try {
+      const response = await fetch('http://localhost:3030/api/todos/categories/', {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+      if(!response.ok) {
+        throw new Error("Network error while fetching data.");
+      }
+      const result = await response.json();
+      this.setState ({
+        allCategories: result,
+        loading: false
+      });
+      console.log("DATA: ", allCategories);
       
     } catch (err) {
       this.setState({ error: err.message, loading: false });
@@ -165,6 +188,11 @@ class List extends Component {
       });
   };
 
+  handleCategoryChange = (event) => {
+    // send the new category id to the backend for update. and fetchAll
+    console.log("Selected Item:", event.target.value);
+  };
+
   getPriorityClass = (priority) => {
    if (priority === 0) return 'priority-high';
    if (priority === 1) return 'priority-medium';
@@ -177,6 +205,7 @@ class List extends Component {
    if (repetition === 2) return 'Monthy'
    return 'Never';
   };
+
 
   render() {
     return (
@@ -263,7 +292,12 @@ class List extends Component {
                   <div className={`item-details-priority ${this.getPriorityClass(item.priority)}` }>{this.state.priority.priority}</div>
                   <div className="item-details-date">Due: {item.dueDate.substring(0,10)|| ''}</div><br/>
                   <div className="item-details-repeat">Repeat: {this.getRepetitionType(item.repetition)}</div><br/>
-                  <div className="item-details-category">Category: {item.category?.name}</div><br/>
+                  <label for="category">Category</label>
+                  <select className="item-details-category" name="category" onChange={this.handleCategoryChange}>{this.state.allCategories?.map((categ, index) => (
+                    
+                    <option value={categ.name} selected={item.category?.name? true: undefined}>{categ.name}</option>
+       
+                  ))}</select><br/>
                 </div>
                 <div className="item-details-description">{item.description}</div>
               </div>

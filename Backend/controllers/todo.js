@@ -7,6 +7,21 @@ const defaultCategory = {
   'personal':'6ac414b908165769a9fd20c3',
 }
 
+export const getCategories = async (req, res) => {
+  try {
+    const categories = await Category.find({
+      $or: [
+        { author: req.user._id },
+        { author: null }
+      ]
+    });
+    res.json(categories);
+    
+  } catch (err) {
+    res.status(500).json({ message: err.message || err });
+  }
+};
+
 export const getTodos = async (req, res) => {
   try {
     // const todos = await Todos.find({ author: req.user._id }); 
