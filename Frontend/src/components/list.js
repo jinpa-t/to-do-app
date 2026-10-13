@@ -54,7 +54,7 @@ class List extends Component {
         allCategories: result,
         loading: false
       });
-      console.log("DATA: ", allCategories);
+      console.log("DATA: ", result);
       
     } catch (err) {
       this.setState({ error: err.message, loading: false });
@@ -125,7 +125,7 @@ class List extends Component {
         priority: toDoListPriority,
         dueDate: toDoListDueDate,
         repetition: toDoListRepeat,
-        category: 'work'
+        category: 'general'
       })
       })
       .then((response) => response.json())
@@ -188,9 +188,44 @@ class List extends Component {
       });
   };
 
-  handleCategoryChange = (event) => {
+  handleCategoryChange = (e, uuid, item) => {
     // send the new category id to the backend for update. and fetchAll
-    console.log("Selected Item:", event.target.value);
+     /*
+      PATCH: update the status of the list.
+    */
+   let id = null;
+   this.state.allCategories.map((categ, index) => {
+      if(categ.name === e.target.value){
+        id = categ._id;
+      }
+   });
+   let itemCopy = item;
+   itemCopy.category = id;
+   
+  fetch(`http://localhost:3030/api/todos/${uuid}`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json' // 1. Tells the server you are sending JSON
+      },
+      body: JSON.stringify({
+        description: itemCopy.description,
+        priority: itemCopy.priority,
+        dueDate: itemCopy.dueDate,
+        repetition: itemCopy.repetition,
+        category: itemCopy.category
+      })
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("ToDo List saved successfully:", data);
+        this.fetchAllTodos(); 
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+      });
+
+      console.log("Selected Item:", e.target.value);
   };
 
   getPriorityClass = (priority) => {
@@ -293,9 +328,9 @@ class List extends Component {
                   <div className="item-details-date">Due: {item.dueDate.substring(0,10)|| ''}</div><br/>
                   <div className="item-details-repeat">Repeat: {this.getRepetitionType(item.repetition)}</div><br/>
                   <label for="category">Category</label>
-                  <select className="item-details-category" name="category" onChange={this.handleCategoryChange}>{this.state.allCategories?.map((categ, index) => (
+                  <select className="item-details-category" name="category" onChange={(e) => this.handleCategoryChange(e, item._id, item)}>{this.state.allCategories?.map((categ, index) => (
                     
-                    <option value={categ.name} selected={item.category?.name? true: undefined}>{categ.name}</option>
+                    <option value={categ.name} style={{backgroundColor: categ.color}} selected={item.category?.name == categ.name? true: undefined}>{categ.name}</option>
        
                   ))}</select><br/>
                 </div>

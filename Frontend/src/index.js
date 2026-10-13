@@ -13,8 +13,7 @@ const root = createRoot(rootElement);
 root.render(
   <StrictMode>
     <AuthProvider>
-    <App />
-
+      <App />
     </AuthProvider>
     
   </StrictMode>

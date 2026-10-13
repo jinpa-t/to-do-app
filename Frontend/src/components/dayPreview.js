@@ -7,9 +7,9 @@ const DayPreview = ({ day, currentMonth, currentYear, listData = [] }) => {
   const filteredTasks = tasks.filter((item) => {
     const taskDate = new Date(item.dueDate.substring(0,10));
     return (
-      day === taskDate.getDate() &&
-      currentMonth === taskDate.getMonth() &&
-      currentYear === taskDate.getFullYear()
+      day === taskDate.getUTCDate() &&
+      currentMonth === taskDate.getUTCMonth() &&
+      currentYear === taskDate.getUTCFullYear()
     );
   });
   // sort based on task priority

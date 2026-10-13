@@ -81,16 +81,16 @@ export const deleteTodo = async (req, res) => {
 
 export const updateTodo = async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body, req.params.id, req.user._id, req.body.category);
     const updatedTodo = await Todos.findOneAndUpdate(
       { _id: req.params.id, author: req.user._id },
       { $set: 
         { 
-            
             description: req.body.description,
             priority: req.body.priority,
             dueDate: req.body.dueDate,
-            repetition: req.body.repetition 
+            repetition: req.body.repetition,
+            category: req.body.category
         } 
       },
       { new: true, runValidators: true } 
