@@ -38,9 +38,9 @@ const todoSchema = new mongoose.Schema({
   },
   // Index 5: custom category for the item.
   category: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId, 
     ref: 'Category',
-    required: [false, 'Category is required']
+    required: false
   }
 }, {
   timestamps: true

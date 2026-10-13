@@ -7,12 +7,11 @@ import About from "./components/About";
 import Welcome from "./components/welcome";
 import Logout from "./components/logout";
 import Posts from "./components/Posts";
-
+import { useAuth } from "./context/AuthContext.js";
 import "./styles.css";
-import List from "./components/list.js";
-import CustomCalendar from "./components/CustomCalendar.js";
 
 export default function App() {
+  const{ isLoggedIn } = useAuth();
   return (
     <div>
       <div className="App bg-dark">
@@ -23,7 +22,9 @@ export default function App() {
           <a href="/posts" className="btn btn-primary me-2">Posts</a>
           <a href="/about" className="btn btn-primary me-2">About</a>
           <a href="/login" className="btn btn-primary me-2">Login</a>
-          <a href="/logout" className="btn btn-primary me-2">Logout</a>
+          {isLoggedIn?(
+            
+          <a href="/logout" className="btn btn-primary me-2">Logout</a>):(<div></div>)}
         </nav>
         <BrowserRouter>
           <Routes>

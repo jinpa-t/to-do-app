@@ -146,3 +146,8 @@ h2 {
   content: "x ";
   color: #1a0cb4;
 }
+select {
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
+}
