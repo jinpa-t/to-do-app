@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Edit from "./Edit";
+import Edit from "./edit";
 
 class List extends Component {
   constructor() {
@@ -264,17 +264,22 @@ class List extends Component {
               }
             }}
           />
+          <br />
+          <label for="priority">Priority:</label>
           <select name="priority" id="priority">
             <option value="0">High</option>
             <option value="1">Medium</option>
             <option value="2" defaultChecked>Normal</option>
           </select>
+          <label for="repeat">Repeat:</label>
           <select name="repeat" id="repeat">
             <option value="-1" defaultChecked>Never</option>
             <option value="0">Daily</option>
             <option value="1">Weelky</option>
             <option value="2">Monthly</option>
           </select>
+          <br />
+          <label for="dueDate">Due Date:</label>
           <input name="dueDate" id="dueDate" type="date"></input>
           <button
             id="add-btn"
@@ -335,6 +340,8 @@ class List extends Component {
                   ))}</select><br/>
                 </div>
                 <div className="item-details-description">{item.description}</div>
+                <div>Shared with : {item.category.shared_with?"Yes":"No"}</div>
+                <button>Share</button>
               </div>
             </div>
             
