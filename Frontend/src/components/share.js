@@ -6,10 +6,8 @@ const Share = ({ selectedItem }) => {
   const [successMsg, setScuccessMsg] = useState(false);
 
   const handleEmailChange = (e) => {
-    setEmail(prevItem => ({
-    ...prevItem,
-    priority: e.target.value
-  }));
+    setEmail(e.target.value
+  );
   };
 
   const add = () => {
@@ -28,7 +26,8 @@ const Share = ({ selectedItem }) => {
         'Content-Type': 'application/json' // 1. Tells the server you are sending JSON
       },
       body: JSON.stringify({
-        email: email
+        email: email,
+        permission: 'edit'
       })
       })
       .then((response) => response.json())
@@ -42,14 +41,14 @@ const Share = ({ selectedItem }) => {
   };
 
   return (
-    <div className="day-preview-container">
+    <div className="share-preview-container">
         <div className='edit-form-container'>
-          <h3>Shareing </h3>
+          <h3>Enter the email of the user you want to share this with. </h3>
           <input
             id="text"
             name="new-list"
             type="email" 
-            value={email || ''}
+            
             onChange={handleEmailChange}
           />
            <button
