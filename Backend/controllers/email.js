@@ -1,12 +1,12 @@
 import nodemailer from 'nodemailer';
-import 'dotenv/config'; // Loads your variables from .env
+import 'dotenv/config';
 import crypto from 'crypto';
-import { Invitation } from '../models/Invitation.js'; // Paths to your models
+import { Invitation } from '../models/Invitation.js';
 
 
 export const sendEmail = async (req, res) => {
     console.log(req.body)
-    // Generate secure 64-character token string
+    // generate secure 64-character token string
     const token = crypto.randomBytes(32).toString('hex');
     const { email, permission } = req.body;
     // Save invitation metadata to MongoDB
@@ -17,7 +17,7 @@ export const sendEmail = async (req, res) => {
       token: token
     });
 
-    // 1. Create a transporter object using Gmail SMTP configuration
+    // create a transporter object using Gmail SMTP configuration
     const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465, 
@@ -28,10 +28,10 @@ export const sendEmail = async (req, res) => {
     },
     });
 
-    // 2. Define the email options
+    // email options
     const mailOptions = {
     from: `"ToDo App" <${process.env.GMAIL_USER}>`,
-    to: process.env.GMAIL_USER, // List of receivers
+    to: process.env.GMAIL_USER, // receiver
     subject: 'Hello from Node.js & Gmail SMTP! ✔',
     text: 'This is a plain text email sent using Nodemailer.', 
     html: `<div style="font-family: sans-serif; padding: 20px;">
@@ -49,7 +49,7 @@ export const sendEmail = async (req, res) => {
         </div>`
     };
 
-    // 3. Send the email
+    // send the email
     async function sendMail() {
         try {
             const info = await transporter.sendMail(mailOptions);
@@ -81,7 +81,7 @@ export const handleResponse = async (req, res) => {
     }
 
     if (action === 'accept') {
-      // 💡 Assumption: The target user is logged into your platform. 
+      // Assumption: The target user is logged into your platform. 
       // You should grab their active user account database ID from req.user
       const loggedInUserId = req.user?._id; 
       

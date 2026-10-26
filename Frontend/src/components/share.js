@@ -47,11 +47,10 @@ const Share = ({ selectedItem }) => {
           <input
             id="text"
             name="new-list"
-            type="email" 
-            
+            type="email"
             onChange={handleEmailChange}
           />
-           <button
+          <button
             id="add-btn"
             onClick={() => {
               add();

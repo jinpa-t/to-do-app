@@ -86,11 +86,12 @@ export const updateTodo = async (req, res) => {
       { _id: req.params.id, author: req.user._id },
       { $set: 
         { 
-            description: req.body.description,
-            priority: req.body.priority,
-            dueDate: req.body.dueDate,
-            repetition: req.body.repetition,
-            category: req.body.category
+            description: req.body.itemCopy.description,
+            status: req.body.itemCopy.status,
+            priority: req.body.itemCopy.priority,
+            dueDate: req.body.itemCopy.dueDate,
+            repetition: req.body.itemCopy.repetition,
+            category: req.body.itemCopy.category
         } 
       },
       { new: true, runValidators: true } 
