@@ -8,7 +8,7 @@ import {
   loginUser,
   logoutUser
   
-} from "../controllers/crud.js";
+} from "../controllers/user.js";
 import verify from "./verify.js";
 
 const router = express.Router();

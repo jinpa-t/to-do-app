@@ -82,7 +82,10 @@ export const loginUser = async (req, res) => {
   });
   try {
     await tok;
-    res.status(200).json({ message: "Logged in successfully" });
+    res.status(200).json({ 
+      message: "Logged in successfully", 
+      user: user._id
+     });
   } catch (err) {
     res.send(err);
   }

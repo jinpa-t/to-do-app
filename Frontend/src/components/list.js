@@ -4,6 +4,7 @@ import Edit from "./edit";
 import Share from "./share";
 
 const List = () =>{
+  const [inputValue, setInputValue] = useState("");
   const [todoData, setTodoData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -186,7 +187,6 @@ const List = () =>{
       });
   };
 
-
   const changeCategory = (e, uuid, item) => {
     let id = null;
     allCategories.map((categ) => {
@@ -243,16 +243,18 @@ const List = () =>{
           id="text"
           name="new-list"
           type="text"
+          value={inputValue}
+          onChange={(event) => setInputValue(event.target.value)}
           placeholder="enter your text"
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               add(
-              document.querySelector("#text").value,
+              inputValue,
               document.querySelector("#priority").value || 2,
               (document.querySelector("#repeat").value || -1),
               (document.querySelector("#dueDate").value || 0),
               );
-              document.querySelector("#text").value = "";
+              setInputValue("");
             }
           }}
         />
@@ -277,12 +279,12 @@ const List = () =>{
           id="add-btn"
           onClick={() => {
             add(
-              document.querySelector("#text").value,
+              inputValue,
               document.querySelector("#priority").value || 2,
               (document.querySelector("#repeat").value || -1),
               (document.querySelector("#dueDate").value || 0),
             );
-            document.querySelector("#text").value = "";
+            setInputValue("");
           }}
         >
           Add

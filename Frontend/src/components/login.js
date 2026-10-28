@@ -1,6 +1,5 @@
-import { Component , useState} from "react";
+import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import LoginBtn from "../components/loginbtn";
 import { useAuth } from '../context/AuthContext.js';
 
 const Login = () => {
@@ -23,7 +22,7 @@ const Login = () => {
     .then((response) => response.json())
     .then((data) => {
       setIsLoggedIn(true);
-      const mockUser = { id: 1, name: 'Alex' };
+      const mockUser = { id: data.id };
       login(mockUser);
     })
     .catch((error) => {
@@ -69,7 +68,7 @@ const Login = () => {
           className="btn btn-primary"
         >Login</button>
       </div>
-      <LoginBtn />
+      
       <div className="fs-4">New to Codium? Sign up <a href="/signup">here</a></div>
     </div>
   );
