@@ -204,11 +204,7 @@ const List = () =>{
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        description: itemCopy.description,
-        priority: itemCopy.priority,
-        dueDate: itemCopy.dueDate,
-        repetition: itemCopy.repetition,
-        category: itemCopy.category
+        itemCopy
       })
     })
       .then((response) => response.json())
@@ -297,7 +293,7 @@ const List = () =>{
           return item && item.status === 0;
         }).map((item) => (
           
-          <div className="list-item" key={item._id}>
+          <div className="list-item" key={item._id} style={{backgroundColor: item.category.color}}>
             <div className="item-actions">
               <input
                 name="check"

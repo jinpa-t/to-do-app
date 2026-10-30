@@ -66,10 +66,7 @@ const Edit = ({ selectedItem }) => {
       },
       body: JSON.stringify({
        
-        description: _selectedItem.description,
-        priority: _selectedItem.priority,
-        dueDate: _selectedItem.dueDate,
-        repetition: _selectedItem.repetition
+        itemCopy :_selectedItem
       })
       })
       .then((response) => response.json())
