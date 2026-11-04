@@ -21,10 +21,10 @@ export default function App() {
           <a href="/welcome" className="btn btn-primary me-2">Home</a>
           <a href="/posts" className="btn btn-primary me-2">Posts</a>
           <a href="/about" className="btn btn-primary me-2">About</a>
-          <a href="/login" className="btn btn-primary me-2">Login</a>
-          {isLoggedIn?(
-            
-          <a href="/logout" className="btn btn-primary me-2">Logout</a>):(<div></div>)}
+          {!isLoggedIn && (
+            <a href="/login" className="btn btn-primary me-2">Login</a>)}
+          {isLoggedIn && (
+            <a href="/logout" className="btn btn-primary me-2">Logout</a>)}
         </nav>
         <BrowserRouter>
           <Routes>
