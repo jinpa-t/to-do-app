@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
 
 const Login = () => {
     const [data, setData] = useState(null);
@@ -35,10 +34,16 @@ const Login = () => {
                     type="submit"
                     className="btn btn-primary"
                 >Get Posts</button>
-                <div>
-                    <h1>Posts</h1>
-                    <div>{data && JSON.stringify(data, null, 2)}</div>
-                </div>
+                
+                { data && data.map((item) =>{
+                    return(
+                    <div key={item._id}>
+                        <h3>{item.title}</h3>
+                        <div>
+                            {item.description}
+                        </div>
+                    </div>)
+                })}
             </div>
         </div>
     );

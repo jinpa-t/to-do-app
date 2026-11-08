@@ -103,7 +103,8 @@ const CustomCalendar = () => {
        
         //  Add Day of the week
         for (let i = 0; i < weekDays.length; i++) {
-            cells.push(<div key={`week-day-${weekDays[i]}`} className="calendar-cell-weekday">{weekDays[i]}</div>);
+            const style = (weekDays[i] === "Sun" || weekDays[i] === "Sat") ? { color: 'red' } : {};
+            cells.push(<div key={`week-day-${weekDays[i]}`} className="calendar-cell-weekday" style={style}>{weekDays[i]}</div>);
         }
 
         // 1. Padding for days from the previous month
