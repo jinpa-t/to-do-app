@@ -48,6 +48,7 @@ const Share = ({ selectedItem }) => {
             id="text"
             name="new-list"
             type="email"
+            placeholder='enter email'
             onChange={handleEmailChange}
           />
           <button
@@ -57,7 +58,7 @@ const Share = ({ selectedItem }) => {
               document.querySelector("#text").value = "";
             }}
           >
-            Save
+            Send
           </button>
           {successMsg && <div className='priority-normal'>Saved successfully</div>
           }

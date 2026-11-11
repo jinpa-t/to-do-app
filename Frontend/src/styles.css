@@ -1,6 +1,15 @@
 html {
   color:#fff;
-  margin-left: 5px;
+}
+#root{
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+
+}
+.App{
+  padding-left: 10px;
+  flex: 1;
 }
 body{
   color: #fff;
@@ -150,4 +159,13 @@ select {
   background: none;
   border: 2px solid #fff;
   color: #fff;
+}
+.share-item-preview{
+  border: 2px solid #fff;
+  position: absolute;
+  margin: auto;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  padding: 5px 5px;
 }

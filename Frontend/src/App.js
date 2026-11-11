@@ -7,19 +7,21 @@ import About from "./components/about.js";
 import Welcome from "./components/welcome";
 import Logout from "./components/logout";
 import Posts from "./components/Posts";
+import CustomeCalendar from "./components/CustomCalendar.js";
 import { useAuth } from "./context/AuthContext.js";
 import "./styles.css";
 
 export default function App() {
   const{ isLoggedIn } = useAuth();
   return (
-    <div>
+    
       <div className="App bg-dark">
         <span className="fs-3"><span className="text-info">C</span>o<span className="text-info">d</span>i<span className="text-info">u</span>m</span>
         <span className="fs-6"> Where magic happens</span>
         <nav className="">
-          <a href="/welcome" className="btn btn-primary me-2">Home</a>
+          <a href="/welcome" className="btn btn-primary me-2">To-Do Tasks</a>
           <a href="/posts" className="btn btn-primary me-2">Posts</a>
+          <a href="/calendar" className="btn btn-primary me-2">Calendar</a>
           <a href="/about" className="btn btn-primary me-2">About</a>
           {!isLoggedIn && (
             <a href="/login" className="btn btn-primary me-2">Login</a>)}
@@ -37,6 +39,8 @@ export default function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/welcome" element={<Welcome />}></Route>
               <Route path="/posts" element={<Posts />} />
+              <Route path="/calendar" element={<CustomeCalendar />} />
+
             </Route>
           </Routes>
         </BrowserRouter>
@@ -44,7 +48,6 @@ export default function App() {
         <footer className="footer">
           <p className="text-center">Powered by <em>React</em> and <em>Node.js</em> &copy; 2026</p>
         </footer>
-      </div>          
-    </div>
+      </div> 
   );
 }

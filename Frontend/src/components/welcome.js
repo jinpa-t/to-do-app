@@ -9,8 +9,7 @@ const Welcome = () => {
       <div className="fs-4">Welcome to Codium. Write, Collaborate, Innovate, and Share next generation of software systems.</div>
       <h2>To-Do List</h2>
       <List />
-      <br />
-      <CustomCalendar />
+      
     </div>
   );
 };
